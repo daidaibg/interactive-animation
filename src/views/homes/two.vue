@@ -3,9 +3,17 @@ import { onMounted } from "vue";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
+const emits=defineEmits<{
+  (event: "next", e?: Event): void;
+}>()
+
 onMounted(() => {
   init();
 });
+
+const next=(e:any)=>{
+    emits("next",e)
+}
 
 const init = () => {
   gsap.registerPlugin(ScrollTrigger);
@@ -36,13 +44,10 @@ const init = () => {
   scene1.to("#h1-8", { y: 3.5 * speed, x: 0.2 * speed }, 0);
   scene1.to("#h1-9", { y: 3.5 * speed, x: -0.2 * speed }, 0);
 
-  scene1.to("#morning", {x:"-300px", y:"30px", }, 0);
-
-  
-
+  scene1.to("#morning", { x: "-300px", y: "30px" }, 0);
 
   //animate text
-  scene1.to("#info", { y: 8 * speed }, 0);
+  scene1.to("#info", { y: "100vh" }, 0);
 
   /*   Bird   */
   gsap.fromTo(
@@ -81,8 +86,6 @@ const init = () => {
   clouds.to("#cloud2", { x: 1000 }, 0);
   clouds.to("#cloud3", { x: -1000 }, 0);
   clouds.to("#cloud4", { x: -700, y: 25 }, 0);
-
-
 
   /* Sun motion Animation  */
   let sun = gsap.timeline();
@@ -181,6 +184,10 @@ const init = () => {
     0
   );
 
+  sun2.to("#noon", { scale: 1, rotate: 0, x: "-50%", y: 30 }, 0);
+
+  sun2.to("#init_img", { x: "100%", y: "30px", left: "0" }, 0);
+
   /* Transition (from Scene2 to Scene3) */
   gsap.set("#scene3", { y: 580, visibility: "visible" });
   let sceneTransition = gsap.timeline();
@@ -215,20 +222,26 @@ const init = () => {
   scene3.fromTo("#h3-2", { y: 800 }, { y: -550 }, 0.03);
   scene3.fromTo("#h3-3", { y: 600 }, { y: -550 }, 0.06);
   scene3.fromTo("#h3-4", { y: 800 }, { y: -550 }, 0.09);
+
   scene3.fromTo("#h3-5", { y: 1000 }, { y: -550 }, 0.12);
 
   //stars
   scene3.fromTo("#stars", { opacity: 0 }, { opacity: 0.5, y: -500 }, 0);
 
   // Scroll Back text
-//   scene3.fromTo("#arrow2", { opacity: 0 }, { opacity: 0.7, y: -710 }, 0.25);
-//   scene3.fromTo("#text2", { opacity: 0 }, { opacity: 0.7, y: -710 }, 0.3);
+  //   scene3.fromTo("#arrow2", { opacity: 0 }, { opacity: 0.7, y: -710 }, 0.25);
+  //   scene3.fromTo("#text2", { opacity: 0 }, { opacity: 0.7, y: -710 }, 0.3);
   scene3.fromTo("#newtext2", { opacity: 0 }, { opacity: 0.7, y: "66vh" }, 0.3);
-
 
   //gradient value change
   scene3.to("#bg2-grad", { attr: { cy: 600 } }, 0);
   scene3.to("#bg2-grad", { attr: { r: 500 } }, 0);
+
+  scene3.to("#night", { y: 60, x: "30%" }, 0);
+
+  scene3.to("#init_img2", { x: "-75%" }, 0);
+
+  scene3.to("#noon2", { x: "-100vw", y: 0 }, 0);
 
   /*   falling star   */
   gsap.to("#fstar", {
@@ -248,13 +261,16 @@ const init = () => {
       },
     },
   });
-
-
 };
 </script>
 
 <template>
   <div class="two" ref="ScrollTrigger" translate="no">
+    <div id="init_img">
+      <div id="init_img2">
+        <img src="../../assets/two/hello.png" alt="" srcset="" />
+      </div>
+    </div>
     <svg
       xmlns="http://www.w3.org/2000/svg"
       xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -784,22 +800,22 @@ const init = () => {
           <circle cx="122.39" cy="60.39" r="1.46" />
         </g>
         <g id="hills3">
-          <!-- <g
+          <g
             id="info2"
             fill="#fff"
             stroke="#231f20"
             stroke-miterlimit="10"
             stroke-width="0.5"
           >
-            <polygon
+            <!-- <polygon
               id="arrow2"
               points="395.54 482.2 393.42 484.32 375.21 466.11 357 484.32 354.88 482.2 375.21 461.87 395.54 482.2"
-            />
-            <path
+            /> -->
+            <!-- <path
               id="text2"
               d="M271.83,526.25c8.43,7,22.44-4.5,8.12-9.81-17.84-5.29-3.76-24,9-16.3l-1.15,3.4c-8.64-5.65-19.35,5-5.78,9.51,18.51,6.4,2.17,25.56-11.29,16.69Zm40.77,4.2c-23.79,9.74-23.83-30.49.1-21.56l-1,3.25c-17.45-7.49-16.83,23,.14,15.16Zm4.92-15.06c0-2.72,0-5.06-.19-7.21H321l.15,4.54h.19c1.18-3.51,4.33-5.65,7.6-4.93v4c-10.05-1.87-6.74,14-7.27,19.55h-4.16Zm36.09,4.16c.06,16.67-23,15.92-22.61.39C330.42,503.76,354.25,503.82,353.61,519.55Zm-18.35.24c-.33,11.61,14.38,11.67,14.05-.09C349.93,508.2,334.68,508,335.26,519.79Zm23.66-22.42h4.2v33.94h-4.2Zm11.28,0h4.2v33.94h-4.2Zm21.55,2.15c10.47-4.16,28.78,5.43,13.68,14.44v.1c16.82,8.34-.17,21.3-13.68,17.16Zm4.16,13.2c14.51,2.35,13.77-13.75,0-10.38Zm0,15.44c15.35,3,15.91-14.63,0-12.29Zm34.42,3.15L430,528.4h-.15c-14.13,12.87-22.31-13.84-.24-11.81,1.43-5.45-7.12-7.5-11.28-4.11l-.95-2.78c19.12-8.74,16,9.8,16.77,21.61Zm-.62-11.8c-7.46-1.94-14.57,7.36-5.83,9.22C429.55,528.62,430.05,523.62,429.71,519.51Zm27.34,10.94c-23.79,9.74-23.83-30.49.1-21.56l-1,3.25c-17.45-7.49-16.83,23,.14,15.16Zm9.08-11.66h.1c1.28-1.88,7.29-8.74,8.84-10.61h5.07l-8.94,9.51,10.18,13.62h-5.11l-8-11.09-2.15,2.39v8.7H462V497.37h4.16Z"
-            />
-          </g> -->
+            /> -->
+          </g>
           <polygon
             id="h3-5"
             points="756.31 330.55 750.57 327.01 742.42 331.08 719.12 317.36 705.87 311.91 695.11 307.32 688.01 314.24 675.69 336.9 665.32 346.76 657.77 353.08 641.17 353.46 633.52 362.58 626.63 373.11 618.53 378.94 596.8 411.28 588.95 404.93 578.86 406.48 539.9 443.36 472 493.8 556 490.91 756.14 490.91 756.31 330.55"
@@ -873,14 +889,22 @@ const init = () => {
               stroke-miterlimit="10"
               stroke-width="0.5"
             />
-            <path
+            <polygon
+              id="arrowcopy"
+              points="353.93 368.91 356.06 366.79 374.26 385 392.47 366.79 394.59 368.91 374.26 389.24 353.93 368.91"
+              fill="#fff"
+              stroke="#231f20"
+              stroke-miterlimit="10"
+              stroke-width="0.5"
+            />
+            <!-- <path
               id="text"
               d="M261.62,345.74c8.46,7,22.53-4.51,8.16-9.84-17.91-5.31-3.78-24.1,9.06-16.36L277.69,323c-8.32-5.73-19.5,5.41-5.8,9.55,18.58,6.42,2.18,25.66-11.33,16.74ZM302.54,350c-23.47,10.27-23.65-31.11.1-21.64l-1,3.27c-17.3-7.88-16.61,23.5.14,15.21Zm4.94-15.11c0-2.74,0-5.09-.19-7.25H311l.14,4.56h.19c1.19-3.52,4.35-5.66,7.63-4.94v4c-10.08-1.88-6.76,14-7.29,19.63h-4.18ZM343.71,339c.06,16.73-23.06,16-22.7.39C320.43,323.17,344.34,323.23,343.71,339Zm-18.43.24c-.33,11.66,14.44,11.71,14.11-.09C340.37,327.86,324.33,327.6,325.28,339.26ZM349,316.76h4.22v34.07H349Zm11.32,0h4.23v34.07h-4.23ZM382,318.92c35.43-9.2,34.89,39.64,0,31.81Zm4.18,28.6c23.33,5.69,24.08-31.95,0-25.53ZM435,339c.06,16.73-23.06,16-22.7.39C411.73,323.17,435.64,323.23,435,339Zm-18.43.24c-.33,11.66,14.43,11.71,14.11-.09C431.67,327.86,415.63,327.6,416.58,339.26Zm25.09-11.66c1.21,4.84,3.94,14.5,4.8,19.2h.15c1-4.69,4.38-14.43,5.85-19.2H456c1.44,4.8,4.69,14.59,5.66,19.2h.15c.7-4.59,3.81-14.45,5.08-19.2h4.18l-7.49,23.23h-3.84c-1.53-5-4.6-13.66-5.61-18.72h-.1c-1,5.17-4.22,13.71-5.85,18.72h-3.84l-7-23.23Zm33.63,6.29c0-2.4,0-4.37-.19-6.29h3.75l.24,3.84h.09c14.6-14.27,17.39,7,15.88,19.39h-4.22c-1-5.08,3.26-20.32-5.37-20.25-9.13,0-5.12,15-6,20.25H475.3Z"
               fill="#fff"
               stroke="#231f20"
               stroke-miterlimit="10"
               stroke-width="0.5"
-            />
+            /> -->
           </g>
           <path
             id="bird"
@@ -906,18 +930,36 @@ const init = () => {
         </g>
       </g>
     </svg>
-    <div id="newtext2" class="nextbutton">
-        <i v-for="i in 60" :key="i" :style="{transform:`rotate(${i*12}deg) translateX(40px)`,animationDelay:`${i*0.05}s`}">
+    <div id="newtext2" class="nextbutton" @click="next"> 
+      <i
+        v-for="i in 60"
+        :key="i"
+        :style="{
+          transform: `rotate(${i * 12}deg) translateX(40px)`,
+          animationDelay: `${i * 0.05}s`,
+        }"
+      >
+      </i>
+    </div>
 
-        </i>
-    </div>
     <div id="morning">
-        <p>朝霞初现，你是我心中的光芒🌄；</p>
-        <p>💑岁月静好，与你同行是最美妙的旅程；</p>
-        <p> 我爱你❤️，比朝阳更温暖。</p>
-       
+      <p>朝霞初现，你是我心中的光芒🌄；</p>
+      <p>💑岁月静好，与你同行是最美妙的旅程；</p>
+      <p>我爱你❤️，比朝阳更温暖。</p>
     </div>
-    <div class="scrollElement" ></div>
+    <div id="noon">
+      <div id="noon2">
+        <p>☀️ 阳光明媚，你是我生命中最美的风景；</p>
+        <p>💧流水潺潺，与你一同慢慢流淌；</p>
+        <p>❤️我爱你，比午后的清风更温柔。</p>
+      </div>
+    </div>
+    <div id="night">
+      <p>✨ 星空闪耀，你是我眼中最亮的星；</p>
+      <p>🎨 梦境缠绵，你是我心中最美的画卷</p>
+      <p>❤️ 我爱你，比夜色更深邃。</p>
+    </div>
+    <div class="scrollElement"></div>
   </div>
 </template>
 
@@ -974,69 +1016,193 @@ svg {
   background: #ffffff;
   color: #1b1734;
 }
-#newtext2{
-    color: #FFF;
-    text-align: center;
-    width: 100%;
-    position: fixed;
-    transform: translate(0px, 100vh);
+#newtext2 {
+  color: #fff;
+  text-align: center;
+  width: 100%;
+  position: fixed;
+  transform: translate(0px, 100vh);
 }
 $nextbutton-width: 8px;
-.nextbutton{
+.nextbutton {
   width: $nextbutton-width;
   height: $nextbutton-width;
   perspective: 800px;
- }
- .nextbutton i{
+}
+.nextbutton i {
   /* 动点 */
-  width:$nextbutton-width;
+  width: $nextbutton-width;
   height: $nextbutton-width;
   border-radius: 50%;
-  background:white;
+  background: white;
   box-shadow: 0 0 4px 0 white;
   position: absolute;
   /* 动画 */
   animation: run 3s ease-in-out infinite;
- }
- /* .main i:nth-child(1){
+}
+/* .main i:nth-child(1){
   transform: rotate(0deg) translateX(80px);
  } */
- 
- /* 动画 */
- @keyframes run{
-  0%{
-  opacity: 0;
-  }
-  10%{
-  opacity: 1;
-  }
-  100%{
-  opacity: 1;
-  /* 3D动画效果 */
-  transform: translate3d(0,0,560px);
-  }
- }
 
- #morning{
-    position: fixed;
-    transform: translate(100vw, 30px);
-    writing-mode: vertical-lr;
-    line-height:40px;
-    color: #fff;
-    animation: shining 2.4s alternate infinite;
-    p{
+/* 动画 */
+@keyframes run {
+  0% {
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    /* 3D动画效果 */
+    transform: translate3d(0, 0, 560px);
+  }
+}
+
+#morning {
+  position: fixed;
+  transform: translate(110vw, 30px);
+  writing-mode: vertical-lr;
+  line-height: 40px;
+  color: #fff;
+  z-index: 10;
+  animation: morningshining 2.4s alternate infinite;
+  p {
     font-size: 16px;
+  }
+}
+#noon {
+  position: fixed;
+  transform: scale(0) rotate(180deg) translate3d(-50%, 0, 0);
+  writing-mode: vertical-lr;
+  line-height: 40px;
+  color: #fff;
+  z-index: 10;
+  left: 50%;
+  top: 30px;
+  animation: shining 2.4s alternate infinite;
+  p {
+    font-size: 16px;
+  }
+}
+#night {
+  position: fixed;
+  transform: translate(1000vw, 30px);
+  writing-mode: vertical-lr;
+  line-height: 40px;
+  color: #fff;
+  z-index: 10;
+  animation: nightshining 6s alternate infinite;
+  p {
+    font-size: 16px;
+  }
+}
+@keyframes nightshining {
+  from {
+    opacity: 0.5;
+    text-shadow: 0 0 10px lightblue, 0 0 20px lightblue, 0 0 30px lightblue,
+      0 0 40px skyblue, 0 0 50px skyblue, 0 0 60px skyblue;
+  }
+  to {
+    opacity: 0.9;
+    text-shadow: 0 0 5px lightblue, 0 0 10px lightblue, 0 0 15px lightblue,
+      0 0 20px skyblue, 0 0 25px skyblue, 0 0 30px skyblue;
+  }
+}
+@keyframes morningshining {
+  from {
+    opacity: 0.5;
+    text-shadow: 0 0 10px rgba(247, 209, 114, 0.8),
+      0 0 20px rgba(247, 209, 114, 0.8), 0 0 30px rgba(247, 209, 114, 0.8),
+      0 0 40px rgba(247, 209, 114, 0.6), 0 0 50px rgba(247, 209, 114, 0.6),
+      0 0 60px rgba(247, 209, 114, 0.6);
+  }
+  to {
+    opacity: 0.9;
+    text-shadow: 0 0 5px rgba(247, 209, 114, 0.8),
+      0 0 10px rgba(247, 209, 114, 0.8), 0 0 15px rgba(247, 209, 114, 0.8),
+      0 0 20px rgba(247, 209, 114, 0.6), 0 0 25px rgba(247, 209, 114, 0.6),
+      0 0 30px rgba(247, 209, 114, 0.6);
+  }
+}
 
-    }
- }
- @keyframes shining {
-    from {
-        opacity: 0.5;
-        text-shadow: 0 0 10px lightblue, 0 0 20px lightblue, 0 0 30px lightblue, 0 0 40px skyblue, 0 0 50px skyblue, 0 0 60px skyblue;
-    }
-    to {
-        opacity: 0.9;
-        text-shadow: 0 0 5px lightblue, 0 0 10px lightblue, 0 0 15px lightblue, 0 0 20px skyblue, 0 0 25px skyblue, 0 0 30px skyblue;
-    }
+@keyframes shining {
+  from {
+    opacity: 0.7;
+    text-shadow: 0 0 10px rgba(20, 148, 246, 0.8),
+      0 0 20px rgba(20, 148, 246, 0.8), 0 0 30px rgba(20, 148, 246, 0.8),
+      0 0 40px rgba(20, 148, 246, 0.6), 0 0 50px rgba(20, 148, 246, 0.6),
+      0 0 60px rgba(20, 148, 246, 0.6);
+  }
+  to {
+    opacity: 1;
+    text-shadow: 0 0 5px rgba(171, 155, 193, 0.8),
+      0 0 10px rgba(171, 155, 193, 0.8), 0 0 15px rgba(171, 155, 193, 0.8),
+      0 0 20px rgba(171, 155, 193, 0.6), 0 0 25px rgba(171, 155, 193, 0.6),
+      0 0 30px rgba(171, 155, 193, 0.6);
+  }
+}
+
+#init_img {
+  width: 100%;
+  top: 40px;
+  right: 0;
+  position: fixed;
+
+  z-index: 9;
+  #init_img2 {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  img {
+    width: 100px;
+  }
+}
+#info {
+  transform: translateX(120%);
+  transform-box: fill-box;
+}
+#arrowcopy {
+  transform: translateY(10px) rotate(180deg);
+  transform-box: fill-box;
+  animation: blink 1.6s linear infinite;
+}
+#arrow {
+  transform: rotate(180deg);
+  transform-box: fill-box;
+  animation: blink2 1.6s linear infinite;
+}
+
+@keyframes blink {
+  0% {
+    opacity: 1;
+    transform: translateY(10px) scale(0.5)  rotate(180deg);
+  }
+  50% {
+    opacity: 0.5;
+    transform: translateY(25px)  scale(0.5)  rotate(180deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(10px)  scale(0.5)  rotate(180deg);
+  }
+}
+
+@keyframes blink2 {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(0.5)  rotate(180deg);
+  }
+  50% {
+    opacity: 0.5;
+    transform: translateY(15px)  scale(0.5)  rotate(180deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0)  scale(0.5)  rotate(180deg);
+  }
 }
 </style>

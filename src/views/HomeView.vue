@@ -17,6 +17,11 @@ const toTwo = (e: any) => {
   state.active = 2;
 };
 
+const toThree=(e:any)=>{
+  console.log(e);
+  state.active = 3;
+}
+
 setInterval(() => {
   texts.cnFlag = !texts.cnFlag;
 }, 5000);
@@ -28,7 +33,7 @@ setInterval(() => {
       <Admission @next="toTwo" />
     </div>
     <transition name="fade">
-      <Two v-if="state.active == 2" />
+      <Two v-if="state.active == 2" @next="toThree"/>
     </transition>
     <div class="item">
       <Bg />
